@@ -1,34 +1,47 @@
 package edu.usm.cos420.servlet;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Properties;
+import edu.usm.cos420.dao.PatientCloudSqlDao;
+import edu.usm.cos420.dao.PatientDao;
+import edu.usm.cos420.domain.Patient;
+import edu.usm.cos420.domain.Result;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
 
-import edu.usm.cos420.dao.PatientCloudSqlDao;
-import edu.usm.cos420.dao.PatientDao;
-import edu.usm.cos420.domain.Patient;
-import edu.usm.cos420.domain.Result;
 
-
+/**
+ * HttpServlet for listing patients in a database.
+ */
 @WebServlet(urlPatterns = {"/list"})
 public class ListPatientServlet extends HttpServlet {
-	
+
+	/**
+	 * Handles GET request by getting a list of patients from a database, and displays the list
+	 * @param req: HTTP request
+	 * @param resp: HTTP response
+	 * @throws IOException
+	 * @throws ServletException
+	 *
+	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		
 		//Get DB information
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 
+		//Build DB string using info stored in property file
 		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
 				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
 				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
+
+		System.out.println("Db URL" + dbUrl);
 		PatientDao dao = null;
 		
 		try {
@@ -36,7 +49,8 @@ public class ListPatientServlet extends HttpServlet {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-	
+
+		//Get cursor parameter: current location in db list
 		String startCursor = req.getParameter("cursor");
 		List<Patient> patients = null;
 		String endCursor = null;
@@ -48,10 +62,13 @@ public class ListPatientServlet extends HttpServlet {
 		} catch (Exception e) {
 			throw new ServletException("Error listing patients", e);
 		}
-		
+
+		//Set request attributes forward to "list.jsp"
 		req.getSession().getServletContext().setAttribute("patients", patients);
 		
 		req.setAttribute("cursor", endCursor);
+
+		//Page for "base.jsp" to redirect to
 	    req.setAttribute("page", "list");
 
 		req.getRequestDispatcher("/base.jsp").forward(req, resp);

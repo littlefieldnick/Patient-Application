@@ -14,9 +14,18 @@ import edu.usm.cos420.dao.PatientCloudSqlDao;
 import edu.usm.cos420.dao.PatientDao;
 import edu.usm.cos420.domain.Patient;
 
-
+/**
+ * HttpServlet to handle display the information for a patient.
+ */
 @WebServlet(urlPatterns = {"/read"})
 public class ReadPatientServlet extends HttpServlet{
+	/**
+	 * Handles GET request to display a patients information.
+	 * @param req: HttpServletRequest
+	 * @param resp: HttpServletResponse
+	 * @throws IOException
+	 * @throws ServletException
+	 */
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		Long id = Long.decode(req.getParameter("id"));
@@ -25,17 +34,21 @@ public class ReadPatientServlet extends HttpServlet{
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 
+		//Construct the DB url.
 		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
 				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
 				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 
 		PatientDao dao = null;
+
+		//Create dao to connect to database
 		try {
 			dao = new PatientCloudSqlDao(dbUrl);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
+		//Read the patient from the database, and redirect to "view.jsp"
 		try {
 			Patient patient = dao.readPatient(id);
 			req.setAttribute("patient", patient);

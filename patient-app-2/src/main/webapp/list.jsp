@@ -2,10 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <div class="container">
+	<br>
 	<h3>Patients</h3>
 	<a href="/create" class="btn btn-success btn-sm"> <i
 		class="glyphicon glyphicon-plus"></i> Add Patient
 	</a>
+
+	<br>
+	<br>
 	<c:choose>
 		<c:when test="${empty patients}">
 			<p>No patients found</p>

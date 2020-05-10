@@ -24,8 +24,8 @@ public class ListPatientServlet extends HttpServlet {
 
 	/**
 	 * Handles GET request by getting a list of patients from a database, and displays the list
-	 * @param req: HTTP request edu.usm.cos420.servlet
-	 * @param resp: HTTP response edu.usm.cos420.servlet
+	 * @param req: HTTP request
+	 * @param resp: HTTP response
 	 * @throws IOException
 	 * @throws ServletException
 	 *
@@ -41,7 +41,7 @@ public class ListPatientServlet extends HttpServlet {
 				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
 				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 
-		System.out.println("Db URL" + dbUrl);
+		//Create dao to connect to database
 		PatientDao dao = null;
 		
 		try {

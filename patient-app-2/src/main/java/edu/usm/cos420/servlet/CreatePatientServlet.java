@@ -17,7 +17,17 @@ import edu.usm.cos420.domain.Patient;
 
 @WebServlet(urlPatterns = {"/create"})
 
+/**
+ * HttpServlet to handle creation of patients.
+ */
 public class CreatePatientServlet extends HttpServlet{
+	/**
+	 * Handles the GET request for adding a patient.
+	 * @param req: HttpServletRequest
+	 * @param resp: HttpServletResponse
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
 	IOException {
@@ -27,13 +37,20 @@ public class CreatePatientServlet extends HttpServlet{
 		req.getRequestDispatcher("/base.jsp").forward(req, resp);
 	}
 
+	/**
+	 * Handles the POST request for adding a patient to a database.
+	 * @param req: HttpServletRequest
+	 * @param resp: HttpServletResponse
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
 	IOException {
 		Patient patient = new Patient();
 		patient.setFirstName(req.getParameter("firstName"));
 		patient.setLastName(req.getParameter("lastName"));
-		patient.setGender(req.getParameter("gender"));
+		patient.setGender(req.getParameter("gender").charAt(0));
 		patient.setAddress(req.getParameter("address"));
 		patient.setBirthDate(Date.valueOf(req.getParameter("birthDate")));
 
@@ -41,17 +58,20 @@ public class CreatePatientServlet extends HttpServlet{
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 
+		//Create DB url
 		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
 				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
 				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 
+		//Create dao to connect to database
 		PatientDao dao = null;
 		try {
 			dao = new PatientCloudSqlDao(dbUrl);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
+		//Create patient and redirect to display the patients information
 		try {
 			Long id = dao.createPatient(patient);
 			resp.sendRedirect("/read?id=" + id.toString());   // read what we just wrote

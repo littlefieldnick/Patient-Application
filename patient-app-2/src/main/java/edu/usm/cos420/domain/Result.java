@@ -18,16 +18,36 @@ package edu.usm.cos420.domain;
 import java.util.List;
 
 // [START example]
-public class Result<K> {
 
+/**
+ * Holds a result for a database query.
+ * @param <K>: Class type of the result.
+ */
+public class Result<K> {
+  /**
+   * Current location in list of result from DB
+   */
   public String cursor;
+
+    /**
+     * List of result from DB query
+   */
   public List<K> result;
 
+  /**
+   * Constructs a new Result containing the list of results from a query and the current location in the list of results from the db.
+   * @param result: results of query
+   * @param cursor: current location
+   */
   public Result(List<K> result, String cursor) {
     this.result = result;
     this.cursor = cursor;
   }
 
+  /**
+   * Constructs a new Result containing the list of results from a db query.
+   * @param result: results of query
+   */
   public Result(List<K> result) {
     this.result = result;
     this.cursor = null;
