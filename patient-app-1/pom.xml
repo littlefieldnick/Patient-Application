@@ -15,7 +15,7 @@
   </parent>
 
   <properties>
-    <app.deploy.projectId></app.deploy.projectId> <!--replace with the name of your GCP project -->
+    <app.deploy.projectId>patientapp-2020</app.deploy.projectId> <!--replace with the name of your GCP project -->
     <app.deploy.version>GCLOUD_CONFIG</app.deploy.version>
     <appengine.maven.plugin.version>2.2.0</appengine.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,6 +38,17 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>com.google.cloud.sql</groupId>
+      <artifactId>postgres-socket-factory</artifactId>
+      <version>1.0.15</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.12.jre7</version>
+    </dependency>
     <!-- Compile/runtime dependencies -->
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -55,6 +66,12 @@
       <groupId>jstl</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client-appengine</artifactId>
+      <version>1.30.9</version>
     </dependency>
 
     <!-- Test Dependencies -->

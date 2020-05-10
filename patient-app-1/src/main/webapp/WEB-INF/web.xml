@@ -4,4 +4,9 @@
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+
+  <context-param>
+    <param-name>sql.urlRemote</param-name>
+    <param-value>jdbc:postgresql://google/%s?cloudSqlInstance=%s&amp;socketFactory=com.google.cloud.sql.postgres.SocketFactory&amp;user=%s&amp;password=%s</param-value>
+  </context-param>
 </web-app>

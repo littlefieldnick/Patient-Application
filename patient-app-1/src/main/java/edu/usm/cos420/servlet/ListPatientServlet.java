@@ -40,6 +40,8 @@ public class ListPatientServlet extends HttpServlet {
 		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
 				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
 				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
+
+		System.out.println("Db URL" + dbUrl);
 		PatientDao dao = null;
 		
 		try {
@@ -61,10 +63,12 @@ public class ListPatientServlet extends HttpServlet {
 			throw new ServletException("Error listing patients", e);
 		}
 
-		//Set request attributes forward
+		//Set request attributes forward to "list.jsp"
 		req.getSession().getServletContext().setAttribute("patients", patients);
 		
 		req.setAttribute("cursor", endCursor);
+
+		//Page for "base.jsp" to redirect to
 	    req.setAttribute("page", "list");
 
 		req.getRequestDispatcher("/base.jsp").forward(req, resp);

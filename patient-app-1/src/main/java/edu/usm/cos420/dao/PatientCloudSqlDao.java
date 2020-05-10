@@ -61,6 +61,7 @@ public class PatientCloudSqlDao implements PatientDao {
 			listPatientStmt.setInt(1, offset);
 			List<Patient> resultPatients = new ArrayList<>();
 
+			//Loop through the results and create corresponding Patient objects
 			try (ResultSet rs = listPatientStmt.executeQuery()) {
 				while (rs.next()) {
 					Patient patient = new Patient();
